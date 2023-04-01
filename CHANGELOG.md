@@ -19,3 +19,11 @@ All notable changes to the "blade-components" extension will be documented in th
 ###
 
 - Fixed path descriptor when working with path strings to accommodate unix systems
+
+## [0.0.3]
+
+- Fix path descriptor on files
+
+###
+
+- Fixed minor bug with path descriptor

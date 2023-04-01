@@ -85,7 +85,7 @@ async function pushComponentTemplateFilesCompletion(
 
         relativeViewUri = relativeViewUri
             .replace(".blade.php", "")
-            .replace("components\\", "");
+            .replace("components" + path.sep, "");
 
         const descriptor = "x-" + relativeViewUri.split(path.sep).join(".");
 

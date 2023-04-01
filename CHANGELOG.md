@@ -27,3 +27,12 @@ All notable changes to the "blade-components" extension will be documented in th
 ###
 
 - Fixed minor bug with path descriptor
+
+## [0.0.4]
+
+- Fix path descriptor on files
+
+###
+
+- Fixed minor bug with path descriptor
+

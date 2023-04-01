@@ -38,9 +38,12 @@ async function pushComponentClassFilesCompletion(completionItems: CompletionItem
     );
 
     for (const file of viewClassFiles) {
-        let relativeViewUri = file.fsPath.split(path.join("View", "Components", ""))[1];
+        let relativeViewUri = file.fsPath.split(path.join("View", "Components"))[1];
 
-        relativeViewUri = relativeViewUri.replace(".php", "");
+        relativeViewUri = relativeViewUri
+            .replace(".php", "")
+            .replace(path.sep, " ")
+            .trim();
 
         let descriptor = "x-";
 
@@ -81,11 +84,12 @@ async function pushComponentTemplateFilesCompletion(
     );
 
     for (const file of viewFiles) {
-        let relativeViewUri = file.fsPath.split(path.join("","views",""))[1];
+        let relativeViewUri = file.fsPath.split(path.join("views", "components"))[1];
 
         relativeViewUri = relativeViewUri
             .replace(".blade.php", "")
-            .replace("components" + path.sep, "");
+            .replace(path.sep, "")
+            .trim();
 
         const descriptor = "x-" + relativeViewUri.split(path.sep).join(".");
 

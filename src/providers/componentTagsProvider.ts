@@ -9,6 +9,7 @@ import {
     TextDocument,
     workspace,
 } from "vscode";
+import * as path from 'path';
 import { fileContainsVariable } from "../util";
 
 export default class ComponentTagsProvider implements CompletionItemProvider {
@@ -37,21 +38,20 @@ async function pushComponentClassFilesCompletion(completionItems: CompletionItem
     );
 
     for (const file of viewClassFiles) {
-        let relativeViewUri = file.fsPath.split("View\\Components\\")[1];
+        let relativeViewUri = file.fsPath.split(path.join("View", "Components", ""))[1];
 
         relativeViewUri = relativeViewUri.replace(".php", "");
 
         let descriptor = "x-";
 
-        if (relativeViewUri.includes("\\")) {
-            const segments = relativeViewUri.split("\\");
+        if (relativeViewUri.includes(path.sep)) {
+            const segments = relativeViewUri.split(path.sep);
 
             segments[segments.length - 1] = segments[segments.length - 1]
                 .split(/(?=[A-Z])/)
                 .join("-")
                 .toLowerCase();
 
-            console.log(segments);
             descriptor += segments.join(".").toLowerCase();
         } else {
             descriptor += relativeViewUri
@@ -59,8 +59,6 @@ async function pushComponentClassFilesCompletion(completionItems: CompletionItem
                 .join("-")
                 .toLowerCase();
         }
-
-        console.log(descriptor);
 
         const completionItem = new CompletionItem(descriptor);
 
@@ -83,13 +81,13 @@ async function pushComponentTemplateFilesCompletion(
     );
 
     for (const file of viewFiles) {
-        let relativeViewUri = file.fsPath.split("\\views\\")[1];
+        let relativeViewUri = file.fsPath.split(path.join("","views",""))[1];
 
         relativeViewUri = relativeViewUri
             .replace(".blade.php", "")
             .replace("components\\", "");
 
-        const descriptor = "x-" + relativeViewUri.split("\\").join(".");
+        const descriptor = "x-" + relativeViewUri.split(path.sep).join(".");
 
         const completionItem = new CompletionItem(descriptor);
 

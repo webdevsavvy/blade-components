@@ -66,10 +66,10 @@ async function pushComponentClassFilesCompletion(completionItems: CompletionItem
         const completionItem = new CompletionItem(descriptor);
 
         completionItem.insertText = new SnippetString(
-            `<${descriptor}>` + "${1}" + `</${descriptor}>`
+            `<${descriptor} />`
         );
 
-        completionItem.detail = file.fsPath;
+        completionItem.detail = `View Class: ${relativeViewUri}`;
 
         completionItems.push(completionItem);
     }
@@ -99,8 +99,12 @@ async function pushComponentTemplateFilesCompletion(
             completionItem.insertText = new SnippetString(
                 `<${descriptor}>` + "${1}" + `</${descriptor}>`
             );
+
+            completionItem.detail = `Blade View (with slots): ${relativeViewUri}`
         } else {
             completionItem.insertText = new SnippetString(`<${descriptor} />`);
+
+            completionItem.detail = `Blade View: ${relativeViewUri}`
         }
 
         if (!completionItems.includes(completionItem)) { completionItems.push(completionItem); }

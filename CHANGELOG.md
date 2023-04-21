@@ -16,7 +16,7 @@ All notable changes to the "blade-components" extension will be documented in th
 
 - Fix path descriptor on files
 
-###
+### Fixes
 
 - Fixed path descriptor when working with path strings to accommodate unix systems
 
@@ -24,7 +24,7 @@ All notable changes to the "blade-components" extension will be documented in th
 
 - Fix path descriptor on files
 
-###
+### Fixes
 
 - Fixed minor bug with path descriptor
 
@@ -32,7 +32,14 @@ All notable changes to the "blade-components" extension will be documented in th
 
 - Fix path descriptor on files
 
-###
+### Fixes
 
 - Fixed minor bug with path descriptor
 
+## [0.0.5]
+
+- Added details to differientate between class, anonymous and sloted anonymous components
+
+### Features
+
+- Completetion details for file types

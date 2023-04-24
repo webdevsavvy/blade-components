@@ -40,28 +40,13 @@ async function pushComponentClassFilesCompletion(completionItems: CompletionItem
     for (const file of viewClassFiles) {
         let relativeViewUri = file.fsPath.split(path.join("View", "Components"))[1];
 
-        relativeViewUri = relativeViewUri
+         let descriptor = "x-" + relativeViewUri
             .replace(".php", "")
             .replace(path.sep, " ")
-            .trim();
-
-        let descriptor = "x-";
-
-        if (relativeViewUri.includes(path.sep)) {
-            const segments = relativeViewUri.split(path.sep);
-
-            segments[segments.length - 1] = segments[segments.length - 1]
-                .split(/(?=[A-Z])/)
-                .join("-")
-                .toLowerCase();
-
-            descriptor += segments.join(".").toLowerCase();
-        } else {
-            descriptor += relativeViewUri
-                .split(/(?=[A-Z])/)
-                .join("-")
-                .toLowerCase();
-        }
+            .replace(path.sep, ".")
+            .replace(/\B(?=[A-Z])/g, "-")
+            .trim()
+            .toLowerCase();
 
         const completionItem = new CompletionItem(descriptor);
 
@@ -79,19 +64,18 @@ async function pushComponentTemplateFilesCompletion(
     completionItems: CompletionItem[]
 ) {
     const viewFiles = await workspace.findFiles(
-        "**/resources/views/components/*.blade.php",
+        "**/resources/views/components/**/*.blade.php",
         "**/vendor/**"
     );
 
     for (const file of viewFiles) {
         let relativeViewUri = file.fsPath.split(path.join("views", "components"))[1];
 
-        relativeViewUri = relativeViewUri
+        let descriptor = "x-" + relativeViewUri
             .replace(".blade.php", "")
-            .replace(path.sep, "")
+            .replace(path.sep, " ")
+            .replace(path.sep, ".")
             .trim();
-
-        const descriptor = "x-" + relativeViewUri.split(path.sep).join(".");
 
         const completionItem = new CompletionItem(descriptor);
 
@@ -100,11 +84,11 @@ async function pushComponentTemplateFilesCompletion(
                 `<${descriptor}>` + "${1}" + `</${descriptor}>`
             );
 
-            completionItem.detail = `Blade View (with slots): ${relativeViewUri}`
+            completionItem.detail = `Blade View (with slots): ${relativeViewUri}`;
         } else {
             completionItem.insertText = new SnippetString(`<${descriptor} />`);
 
-            completionItem.detail = `Blade View: ${relativeViewUri}`
+            completionItem.detail = `Blade View: ${relativeViewUri}`;
         }
 
         if (!completionItems.includes(completionItem)) { completionItems.push(completionItem); }

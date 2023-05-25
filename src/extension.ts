@@ -1,17 +1,18 @@
-import { ExtensionContext, languages } from "vscode";
-import ComponentTagsProvider from "./providers/componentTagsProvider";
-import SnippetsProvider from "./providers/snippetsProvider";
+import { ExtensionContext, languages, window } from "vscode";
+import TagsProvider from "./providers/TagsProvider";
+import AttributesProvider from "./providers/AttributesProvider";
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(
         languages.registerCompletionItemProvider(
-            "blade",
-            new SnippetsProvider()
+            { scheme: "file", language: "blade" },
+            new TagsProvider(),
+            "x"
         ),
         languages.registerCompletionItemProvider(
             "blade",
-            new ComponentTagsProvider(),
-            "x"
+            new AttributesProvider(),
+            ":"
         )
     );
 }

@@ -2,10 +2,13 @@
 
 All notable changes to the "blade-components" extension will be documented in this file.
 
-## [Unreleased]
+## [v1.0.0]
 
-- Initial release
+- Mayor realease with basic functionallity to extend upon
 
-### Added
+### Feactures
 
-- Class component autocompletion
+- Class component tag autocompletion
+- Anonymous component tag autocompletion
+- Completetion details for component type
+- Basic component attribute completion

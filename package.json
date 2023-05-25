@@ -1,23 +1,32 @@
 {
   "name": "blade-components",
-  "displayName": "blade-components",
-  "description": "desc",
+  "displayName": "Laravel Blade Component Support",
+  "description": "Laravel blade component auto-completion",
   "author": {
     "name": "webdevsavvy",
     "url": "https://github.com/webdevsavvy"
   },
   "publisher": "webdevsavvy",
+  "private": "true",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {
     "type": "github",
     "url": "https://github.com/webdevsavvy/blade-components"
   },
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.76.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
+  ],
+  "keywords": [
+    "laravel",
+    "blade",
+    "components",
+    "completion"
   ],
   "main": "./out/extension.js",
   "activationEvents": [

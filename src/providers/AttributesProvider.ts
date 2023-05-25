@@ -7,12 +7,14 @@ import {
     OutputChannel,
     Position,
     ProviderResult,
+    SnippetString,
     TextDocument,
     window,
     workspace,
 } from "vscode";
-import { getAttributesFromClassFile, kebabToPascal } from "../util";
 import { CompletionItemKind } from "vscode";
+import { getAttributesFromClassFile, pathFromDot } from "../functions/files";
+import { kebabToPascal } from "../functions/strings";
 
 export default class AttributesProvider implements CompletionItemProvider {
         
@@ -34,10 +36,10 @@ export default class AttributesProvider implements CompletionItemProvider {
             return completionItems;
         }
         
-        const className = kebabToPascal(match[1]);
+        const classPath = kebabToPascal(pathFromDot(match[1]));        
 
         const componentClassFiles = await workspace.findFiles(
-            `**/View/Components/${className}.php`,
+            `**/View/Components/${classPath}.php`,
             "**/vendor/**"
         );
 
@@ -46,6 +48,8 @@ export default class AttributesProvider implements CompletionItemProvider {
         n.forEach(element => {
             
             const completionItem = new CompletionItem(element, CompletionItemKind.Field);
+
+            completionItem.insertText = new SnippetString(`${element}="$1"`);
 
             completionItems.push(completionItem);
 

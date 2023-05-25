@@ -6,9 +6,22 @@ All notable changes to the "blade-components" extension will be documented in th
 
 - Mayor realease with basic functionallity to extend upon
 
-### Feactures
+### Features
 
 - Class component tag autocompletion
 - Anonymous component tag autocompletion
 - Completetion details for component type
 - Basic component attribute completion
+
+## [v1.0.1]
+
+- Modified the package details
+
+## [v1.1.0]
+
+- Added new features to tag auto-completion and attribute auto-completion
+
+### Features
+
+- Added attribute fill on class file tag auto-completion
+- Modified attribute auto-completion for quality of life

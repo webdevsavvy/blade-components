@@ -13,7 +13,7 @@ import {
     workspace,
 } from "vscode";
 import { CompletionItemKind } from "vscode";
-import { getAttributesFromClassFile, pathFromDot } from "../functions/files";
+import { getVariablesFromClassFile, pathFromDot } from "../functions/files";
 import { kebabToPascal } from "../functions/strings";
 
 export default class AttributesProvider implements CompletionItemProvider {
@@ -43,13 +43,13 @@ export default class AttributesProvider implements CompletionItemProvider {
             "**/vendor/**"
         );
 
-        const n = await getAttributesFromClassFile(componentClassFiles[0].fsPath);
+        const n = await getVariablesFromClassFile(componentClassFiles[0].fsPath);
 
-        n.forEach(element => {
+        n.forEach(variable => {
             
-            const completionItem = new CompletionItem(element, CompletionItemKind.Field);
+            const completionItem = new CompletionItem(variable.name, CompletionItemKind.Field);
 
-            completionItem.insertText = new SnippetString(`${element}="$1"`);
+            completionItem.insertText = new SnippetString(variable.attributeSnippetString());
 
             completionItems.push(completionItem);
 

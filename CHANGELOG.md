@@ -25,3 +25,11 @@ All notable changes to the "blade-components" extension will be documented in th
 
 - Added attribute fill on class file tag auto-completion
 - Modified attribute auto-completion for quality of life
+
+## [v1.1.1]
+
+- Added better intellisense when auto-completing attributes
+
+### Features
+
+- Added smart insert of attributes on varaible type

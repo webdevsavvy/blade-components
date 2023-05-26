@@ -1,6 +1,7 @@
 import * as fs from "fs/promises";
 import * as path from "path";
 import { undot } from "./strings";
+import { PhpVariable } from "../interfaces/php";
 
 export async function fileContainsVariable(
     filePath: string,
@@ -11,12 +12,11 @@ export async function fileContainsVariable(
     return fileContents.includes(variableName);
 }
 
-export async function getAttributesFromClassFile(filePath: string) {
+export async function getVariablesFromClassFile(filePath: string) {
     const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
-    const match = /public\s*\w*\s*\$(\w+)/g.exec(fileContents);
 
-    return Array.from(fileContents.matchAll(/public\s*\w*\s*\$(\w+)/g)).map(
-        (val) => val[1]
+    return Array.from(fileContents.matchAll(/public\s*(\w*)\s*\$(\w+)/g)).map(
+        (val) => new PhpVariable(val[1], val[2] ?? null)
     );
 }
 

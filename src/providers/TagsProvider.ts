@@ -9,7 +9,7 @@ import {
     workspace,
 } from "vscode";
 import * as path from "path";
-import { fileContainsVariable, getAttributesFromClassFile as getVariablesFromClassFile } from "../functions/files";
+import { fileContainsVariable, getVariablesFromClassFile } from "../functions/files";
 
 export default class TagsProvider implements CompletionItemProvider {
     async provideCompletionItems(
@@ -53,13 +53,13 @@ async function pushComponentClassFilesCompletion(
 
         const classVariables = await getVariablesFromClassFile(file.fsPath);
 
-        const classAttributes = classVariables.map((variable, index) => {
-            return `:${variable}="$${index + 1}"`;
+        const attributes = classVariables.map((variable, index) => {
+            return variable.attributeSnippetString(index + 1);
         });
         
         const completionItem = new CompletionItem(descriptor);
 
-        completionItem.insertText = new SnippetString(`<${descriptor} ${classAttributes.join(' ')} />`);
+        completionItem.insertText = new SnippetString(`<${descriptor} ${attributes.join(' ')} />`);
 
         completionItem.documentation = 'Insert the component tag with the public variables declared in the class file as attributes';
 

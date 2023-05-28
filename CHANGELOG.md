@@ -33,3 +33,11 @@ All notable changes to the "blade-components" extension will be documented in th
 ### Features
 
 - Added smart insert of attributes on varaible type
+
+## [v1.2.1]
+
+- Added prop detection for anonymous components attribut completion
+
+### Features
+
+- Auto-completion on props declared directly on an anonymous blade component

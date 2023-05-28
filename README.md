@@ -6,4 +6,4 @@ A simple autocompletion extension for blade components
 
 Provide autocompletion for class/anonymous blade components.
 
-![Demonstration](https://github.com/webdevsavvy/blade-components/tree/master/images/blade-component-demonstration.gif?raw=true)
+![Demonstration](https://raw.githubusercontent.com/webdevsavvy/blade-components/master/images/blade-component-demonstration.gif)

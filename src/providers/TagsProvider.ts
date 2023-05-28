@@ -9,7 +9,7 @@ import {
     workspace,
 } from "vscode";
 import * as path from "path";
-import { fileContainsVariable, getVariablesFromClassFile } from "../functions/files";
+import { fileContainsVariable, getPropsFromBladeFile, getVariablesFromClassFile } from "../functions/files";
 
 export default class TagsProvider implements CompletionItemProvider {
     async provideCompletionItems(
@@ -92,14 +92,23 @@ async function pushComponentTemplateFilesCompletion(
 
         const completionItem = new CompletionItem(descriptor);
 
+        const props = (await getPropsFromBladeFile(file.fsPath)).map((prop, index) => {
+            return prop.propSnippetString(index + 1);
+        });
+
         if (await fileContainsVariable(file.fsPath, "$slot")) {
+
             completionItem.insertText = new SnippetString(
-                `<${descriptor}>` + "${1}" + `</${descriptor}>`
+                `<${descriptor} ${props.length > 0 ? props.join(' ') + ' ': ''}>` + "$999" + `</${descriptor}>`
             );
 
             completionItem.detail = `Blade View (with slots): ${relativeViewUri}`;
         } else {
-            completionItem.insertText = new SnippetString(`<${descriptor} />`);
+            completionItem.insertText = new SnippetString(
+                `<${descriptor} ${
+                    props.length > 0 ? props.join(" ") + " " : ""
+                }/>`
+            );
 
             completionItem.detail = `Blade View: ${relativeViewUri}`;
         }

@@ -1,4 +1,4 @@
-# blade-components
+# Laravel Blade Component Support
 
 A simple autocompletion extension for blade components
 

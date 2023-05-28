@@ -32,6 +32,15 @@
   "activationEvents": [
     "onLanguage:blade"
   ],
+  "contributes": {
+    "commands" : [
+      {
+        "command": "blade-components.refreshCache",
+        "title": "Laravel Blade Component Suppor: Refresh cache",
+        "shortTitle": "Refresh cache"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",

@@ -2,16 +2,29 @@ import {
     CancellationToken,
     CompletionContext,
     CompletionItem,
+    CompletionItemLabel,
     CompletionItemProvider,
+    ExtensionContext,
     Position,
     SnippetString,
     TextDocument,
     workspace,
 } from "vscode";
 import * as path from "path";
-import { fileContainsVariable, getPropsFromBladeFile, getVariablesFromClassFile } from "../functions/files";
+import {
+    fileContainsVariable,
+    getPropsFromBladeFile,
+    getVariablesFromClassFile,
+} from "../functions/files";
+import { getComponentCache } from "../functions/cache";
 
 export default class TagsProvider implements CompletionItemProvider {
+    private extContext: ExtensionContext;
+
+    constructor(extContext: ExtensionContext) {
+        this.extContext = extContext;
+    }
+
     async provideCompletionItems(
         document: TextDocument,
         position: Position,
@@ -20,98 +33,62 @@ export default class TagsProvider implements CompletionItemProvider {
     ): Promise<CompletionItem[]> {
         const completionItems: CompletionItem[] = [];
 
-        await pushComponentClassFilesCompletion(completionItems);
+        await pushComponentClassFilesCompletion(
+            completionItems,
+            this.extContext
+        );
 
-        await pushComponentTemplateFilesCompletion(completionItems);
+        await pushComponentTemplateFilesCompletion(
+            completionItems,
+            this.extContext
+        );
 
         return completionItems;
     }
 }
 
 async function pushComponentClassFilesCompletion(
-    completionItems: CompletionItem[]
+    completionItems: CompletionItem[],
+    context: ExtensionContext
 ) {
-    const viewClassFiles = await workspace.findFiles(
-        "**/View/Components/**/*.php",
-        "**/vendor/**"
-    );
+    const cache = getComponentCache(context);
 
-    for (const file of viewClassFiles) {
-        let relativeViewUri = file.fsPath.split(
-            path.join("View", "Components")
-        )[1];
+    for (const component of cache.classComponents) {
+        const label: CompletionItemLabel = {
+            label: component.descriptor,
+            description: component.uri,
+            detail: ' ' + "Insert class component",
+        };
 
-        let descriptor =
-            "x-" +
-            relativeViewUri
-                .replace(".php", "")
-                .replace(path.sep, " ")
-                .replace(path.sep, ".")
-                .replace(/\B(?=[A-Z])/g, "-")
-                .trim()
-                .toLowerCase();
+        const completionItem = new CompletionItem(label);
 
-        const classVariables = await getVariablesFromClassFile(file.fsPath);
+        completionItem.insertText = new SnippetString(component.snippetString);
 
-        const attributes = classVariables.map((variable, index) => {
-            return variable.attributeSnippetString(index + 1);
-        });
-        
-        const completionItem = new CompletionItem(descriptor);
+        completionItem.documentation =
+            "Insert the component tag with the public variables declared in the class file as attributes";
 
-        completionItem.insertText = new SnippetString(`<${descriptor} ${attributes.join(' ')} />`);
-
-        completionItem.documentation = 'Insert the component tag with the public variables declared in the class file as attributes';
-
-        completionItem.detail = `View Class: ${relativeViewUri}`;
-
-        completionItems.push(completionItem);
+        if (!completionItems.includes(completionItem)) {
+            completionItems.push(completionItem);
+        }
     }
 }
 
 async function pushComponentTemplateFilesCompletion(
-    completionItems: CompletionItem[]
+    completionItems: CompletionItem[],
+    context: ExtensionContext
 ) {
-    const viewFiles = await workspace.findFiles(
-        "**/resources/views/components/**/*.blade.php",
-        "**/vendor/**"
-    );
+    const cache = getComponentCache(context);
 
-    for (const file of viewFiles) {
-        let relativeViewUri = file.fsPath.split(
-            path.join("views", "components")
-        )[1];
+    for (const component of cache.bladeComponents) {
+        const label: CompletionItemLabel = {
+            label: component.descriptor,
+            description: component.snippetString,
+            detail: ' ' + component.uri,
+        };
 
-        let descriptor =
-            "x-" +
-            relativeViewUri
-                .replace(".blade.php", "")
-                .replace(path.sep, " ")
-                .replace(path.sep, ".")
-                .trim();
+        const completionItem = new CompletionItem(label);
 
-        const completionItem = new CompletionItem(descriptor);
-
-        const props = (await getPropsFromBladeFile(file.fsPath)).map((prop, index) => {
-            return prop.propSnippetString(index + 1);
-        });
-
-        if (await fileContainsVariable(file.fsPath, "$slot")) {
-
-            completionItem.insertText = new SnippetString(
-                `<${descriptor} ${props.length > 0 ? props.join(' ') + ' ': ''}>` + "$999" + `</${descriptor}>`
-            );
-
-            completionItem.detail = `Blade View (with slots): ${relativeViewUri}`;
-        } else {
-            completionItem.insertText = new SnippetString(
-                `<${descriptor} ${
-                    props.length > 0 ? props.join(" ") + " " : ""
-                }/>`
-            );
-
-            completionItem.detail = `Blade View: ${relativeViewUri}`;
-        }
+        completionItem.insertText = new SnippetString(component.snippetString);
 
         if (!completionItems.includes(completionItem)) {
             completionItems.push(completionItem);

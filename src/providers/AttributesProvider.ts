@@ -4,6 +4,7 @@ import {
     CompletionItem,
     CompletionItemProvider,
     CompletionList,
+    ExtensionContext,
     OutputChannel,
     Position,
     ProviderResult,
@@ -17,7 +18,13 @@ import { getVariablesFromClassFile, pathFromDot } from "../functions/files";
 import { kebabToPascal } from "../functions/strings";
 
 export default class AttributesProvider implements CompletionItemProvider {
-        
+    
+    private extContext: ExtensionContext;
+
+    constructor(extContext: ExtensionContext) {
+        this.extContext = extContext;
+    }
+
     async provideCompletionItems(
         document: TextDocument,
         position: Position,

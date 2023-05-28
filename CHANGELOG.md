@@ -57,3 +57,11 @@ All notable changes to the "blade-components" extension will be documented in th
 ### Bugfix
 
 - Fixed bug on props auto complete when props have string defaults
+
+## [v1.2.4]
+
+- Optimization of document parsing by adding a cache
+
+### Bugfix
+
+- Added optimizations for loading component auto-completions, by offloading file parsing to extension activation and using a cache

@@ -2,6 +2,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { undot } from "./strings";
 import { BladeProp, PhpVariable } from "../interfaces/php";
+import { workspace } from "vscode";
 
 export async function fileContainsVariable(
     filePath: string,
@@ -26,8 +27,6 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
 
     const rawProps = /@props\(\[\s*([\'\w,\s=>\[\]\.\\\:\(\)\_\"]+)\]\)/gm.exec(fileContents);
 
-    console.log(rawProps);
-
     if (rawProps !== null) {
 
         try {
@@ -36,13 +35,9 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
                     .split(/,(?=\w*\s*')/)
                     .filter((string) => string !== '');
 
-                console.log(propsArray);
-
                 let bladeProps = propsArray.map((prop) => {
                     return BladeProp.fromRawPropString(prop);
                 });
-
-                console.info(bladeProps);
 
                 return bladeProps;
             } else {
@@ -60,4 +55,18 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
 
 export function pathFromDot(string: string): string {
     return undot(string).join(path.sep);
+}
+
+export async function getBladeComponentFiles() {
+    return await workspace.findFiles(
+        "**/resources/views/components/**/*.blade.php",
+        "**/vendor/**"
+    );
+}
+
+export async function getClassComponentFiles() {
+    return await workspace.findFiles(
+        "**/View/Components/**/*.php",
+        "**/vendor/**"
+    );
 }

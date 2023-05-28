@@ -93,7 +93,7 @@ export class BladeProp {
     }
 
     static fromRawPropString(propString: string): BladeProp {
-        const parsedString = propString.match(/\'(.+)\'\s*(?:=>)?\s*(.+)?,?/);
+        const parsedString = propString.match(/\'(.+)\'\s*(?:=>)?\s*([._\(\)\"\'\-]+)?,?/);
 
         if (parsedString !== null) {
             const name = parsedString[1];
@@ -107,7 +107,7 @@ export class BladeProp {
             return new BladeProp(name);
         }
 
-        throw new Error("String does not contain blade prop" + `${parsedString}`);
+        throw new Error("String does not contain blade prop " + `name:${this.name} parsedString:${parsedString} propString:${propString}`);
     }
 
     propSnippetString(index: number): string {

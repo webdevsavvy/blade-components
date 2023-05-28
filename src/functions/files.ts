@@ -24,13 +24,15 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
 
     const fileContents = await fs.readFile(filePath, { encoding: 'utf-8' });
 
-    const rawProps = /@props\(\[\s*([\'\w,\s=>\[\]\.\\\:\(\)]+)\]\)/gm.exec(fileContents);
+    const rawProps = /@props\(\[\s*([\'\w,\s=>\[\]\.\\\:\(\)\_\"]+)\]\)/gm.exec(fileContents);
 
     if (rawProps !== null) {
 
         try {
             if (rawProps[1].includes(",")) {
-                const propsArray = rawProps[1].split(",").filter(string => !!string);
+                const propsArray = rawProps[1]
+                    .split(/,(?=\w*\s*')/)
+                    .filter((string) => !!string);
 
                 return propsArray.map((prop) => {
                     return BladeProp.fromRawPropString(prop);
@@ -40,6 +42,7 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
             }
         } catch (error) {
             console.error(error);
+            console.info(rawProps, filePath);
         }
 
     }

@@ -41,3 +41,11 @@ All notable changes to the "blade-components" extension will be documented in th
 ### Features
 
 - Auto-completion on props declared directly on an anonymous blade component
+
+## [v1.2.2]
+
+- Minor bugfixes on regex pattern matching for props
+
+### Bugfix
+
+- Fixed a bug when matchin props containg values with quoted strings with commas inside of them

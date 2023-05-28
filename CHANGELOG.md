@@ -48,4 +48,12 @@ All notable changes to the "blade-components" extension will be documented in th
 
 ### Bugfix
 
-- Fixed a bug when matchin props containg values with quoted strings with commas inside of them
+- Fixed a bug when matching props containg values with quoted strings with commas inside of them
+
+## [v1.2.3]
+
+- Minor bugfixes on regex pattern matching for props
+
+### Bugfix
+
+- Fixed bug on props auto complete when props have string defaults

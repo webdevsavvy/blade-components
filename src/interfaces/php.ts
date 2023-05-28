@@ -54,7 +54,7 @@ export enum BladePropType {
 }
 
 function parseDefaults(string: string): [boolean, BladePropType] {
-    if (typeof string === 'undefined' || string === null) {
+    if (typeof string === 'undefined') {
         return [false, BladePropType.UNDEFINED];
     }
 
@@ -93,7 +93,11 @@ export class BladeProp {
     }
 
     static fromRawPropString(propString: string): BladeProp {
-        const parsedString = propString.match(/\'(.+)\'\s*(?:=>)?\s*([._\(\)\"\'\-]+)?,?/);
+        const parsedString = propString.match(/\s*\'([\w_\d]+)\'\s*(?:=>)?\s*(\'?.+\'?)?,?\s*/);
+
+        console.log("Begin parsing string: " + propString);
+
+        console.info(parsedString);
 
         if (parsedString !== null) {
             const name = parsedString[1];

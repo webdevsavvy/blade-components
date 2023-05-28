@@ -26,17 +26,25 @@ export async function getPropsFromBladeFile(filePath: string): Promise<BladeProp
 
     const rawProps = /@props\(\[\s*([\'\w,\s=>\[\]\.\\\:\(\)\_\"]+)\]\)/gm.exec(fileContents);
 
+    console.log(rawProps);
+
     if (rawProps !== null) {
 
         try {
             if (rawProps[1].includes(",")) {
                 const propsArray = rawProps[1]
                     .split(/,(?=\w*\s*')/)
-                    .filter((string) => !!string);
+                    .filter((string) => string !== '');
 
-                return propsArray.map((prop) => {
+                console.log(propsArray);
+
+                let bladeProps = propsArray.map((prop) => {
                     return BladeProp.fromRawPropString(prop);
                 });
+
+                console.info(bladeProps);
+
+                return bladeProps;
             } else {
                 return [BladeProp.fromRawPropString(rawProps[1])];
             }

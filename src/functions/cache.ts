@@ -46,7 +46,7 @@ export async function updateComponentCache(context: ExtensionContext) {
             relativeViewUri
                 .replace(".php", "")
                 .replace(path.sep, " ")
-                .replace(path.sep, ".")
+                .replaceAll(path.sep, ".")
                 .replace(/\B(?=[A-Z])/g, "-")
                 .trim()
                 .toLowerCase();
@@ -77,7 +77,7 @@ export async function updateComponentCache(context: ExtensionContext) {
             relativeViewUri
                 .replace(".blade.php", "")
                 .replace(path.sep, " ")
-                .replace(path.sep, ".")
+                .replaceAll(path.sep, ".")
                 .trim();
 
         let propIndex = 1;
